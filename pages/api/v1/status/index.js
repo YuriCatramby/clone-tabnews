@@ -1,4 +1,4 @@
-import database from "infra/database.js";
+import database from "infra/database";
 
 async function status(request, response) {
   const updatedAt = new Date().toISOString();
@@ -17,7 +17,6 @@ async function status(request, response) {
     text: "SELECT count(*)::int FROM pg_stat_activity WHERE datname = $1;",
     values: [databaseName],
   });
-
   const databaseOpenedConnectionsValue =
     databaseOpenedConnectionsResult.rows[0].count;
 
@@ -26,7 +25,7 @@ async function status(request, response) {
     dependencies: {
       database: {
         version: databaseVersionValue,
-        max_connections: databaseMaxConnectionsValue,
+        max_connections: parseInt(databaseMaxConnectionsValue),
         opened_connections: databaseOpenedConnectionsValue,
       },
     },

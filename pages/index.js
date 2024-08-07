@@ -1,5 +1,5 @@
 function Home() {
-  return <h1>WIP - My first webpage. We'll get there</h1>;
+  return <h1>WIP - My first webpage. We will get there</h1>;
 }
 
 export default Home;

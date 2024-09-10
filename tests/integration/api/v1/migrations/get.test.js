@@ -6,7 +6,7 @@ beforeAll(async () => {
   await orchestrator.clearDatabase();
 });
 
-  // await database.query("drop schema public cascade; create schema public;");
+// await database.query("drop schema public cascade; create schema public;");
 describe("GET /api/v1/migrations", () => {
   describe("Anonymous user", () => {
     test("Running pending migrations", async () => {

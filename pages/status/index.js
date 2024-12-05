@@ -48,12 +48,12 @@ function DatabaseStatus() {
         <div>Max Connections: {data.dependencies.database.max_connections}</div>
       </>
     );
-
-    return (
-      <>
-        <h2>Database</h2>
-        <div>{databaseStatusInformation}</div>
-      </>
-    );
   }
+
+  return (
+    <>
+      <h2>Database</h2>
+      <div>{databaseStatusInformation}</div>
+    </>
+  );
 }

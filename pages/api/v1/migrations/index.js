@@ -14,7 +14,6 @@ export default router.handler(controller.errorHandlers);
 const defaultMigrationsOptions = {
   dryRun: true,
   dir: resolve("infra", "migrations"),
-  // dir: migrationsDir,
   direction: "up",
   verbose: true,
   migrationsTable: "pgmigrations",

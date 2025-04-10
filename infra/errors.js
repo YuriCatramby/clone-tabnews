@@ -1,11 +1,11 @@
 export class InternalServerError extends Error {
   constructor({ cause, statusCode }) {
     super("An unexpected error ocurred.", {
-      cause: cause,
+      cause,
     });
     this.name = "InternalServerError";
     this.action = "Contact suport";
-    this.statusCode = statusCode | 500;
+    this.statusCode = statusCode || 500;
   }
 
   toJSON() {
@@ -18,6 +18,7 @@ export class InternalServerError extends Error {
   }
 }
 
+
 export class ServiceError extends Error {
   constructor({ cause, message }) {
     super(message || "The service is currently unavailable.", {
@@ -26,6 +27,26 @@ export class ServiceError extends Error {
     this.name = "ServiceError";
     this.action = "Contact suport";
     this.statusCode = 503;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class ValidationError extends Error {
+  constructor({ cause, message, action }) {
+    super(message || "A validation error occurred.", {
+      cause,
+    });
+    this.name = "ValidationError";
+    this.action = action || "Adjust the submitted data and try again.";
+    this.statusCode = 400;
   }
 
   toJSON() {

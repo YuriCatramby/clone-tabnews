@@ -1,16 +1,16 @@
-import database from "infra/database.js"
+import database from "infra/database.js";
 import { ValidationError } from "infra/errors.js";
 
 async function create(userInputValues) {
-    await validateUniqueEmail(userInputValues.email);
-    await validateUniqueUsername(userInputValues.username);
+  await validateUniqueEmail(userInputValues.email);
+  await validateUniqueUsername(userInputValues.username);
 
-    const newUser = await runInsertQuery(userInputValues);
-    return newUser;
+  const newUser = await runInsertQuery(userInputValues);
+  return newUser;
 
-    async function validateUniqueEmail(email) {
-        const results = await database.query({
-          text: `
+  async function validateUniqueEmail(email) {
+    const results = await database.query({
+      text: `
             SELECT
               email
             FROM
@@ -18,20 +18,20 @@ async function create(userInputValues) {
             WHERE
               LOWER(email) = LOWER($1)
             ;`,
-          values: [email],
-        });
-        
-        if (results.rowCount > 0) {
-            throw new ValidationError({
-                message: "The email provided is already in use.",
-                action: "Use another email to register.",
-            });
-        }
-    }
+      values: [email],
+    });
 
-    async function validateUniqueUsername(username) {
-        const results = await database.query({
-          text: `
+    if (results.rowCount > 0) {
+      throw new ValidationError({
+        message: "The email provided is already in use.",
+        action: "Use another email to register.",
+      });
+    }
+  }
+
+  async function validateUniqueUsername(username) {
+    const results = await database.query({
+      text: `
             SELECT
               username
             FROM
@@ -39,20 +39,20 @@ async function create(userInputValues) {
             WHERE
               LOWER(username) = LOWER($1)
             ;`,
-          values: [username],
-        });
-        
-        if (results.rowCount > 0) {
-            throw new ValidationError({
-                message: "The username provided is already in use.",
-                action: "Use another username to register.",
-            });
-        }
-    }
+      values: [username],
+    });
 
-    async function runInsertQuery(userInputValues) {
-        const results = await database.query({
-          text: `
+    if (results.rowCount > 0) {
+      throw new ValidationError({
+        message: "The username provided is already in use.",
+        action: "Use another username to register.",
+      });
+    }
+  }
+
+  async function runInsertQuery(userInputValues) {
+    const results = await database.query({
+      text: `
             INSERT INTO
               users (username, email, password)
             VALUES
@@ -60,19 +60,18 @@ async function create(userInputValues) {
             RETURNING
               *
             ;`,
-          values: [
-            userInputValues.username,
-            userInputValues.email,
-            userInputValues.password,
-          ],
-        });
-        return results.rows[0];
-      }
-    }
-
-const user = {
-    create,
+      values: [
+        userInputValues.username,
+        userInputValues.email,
+        userInputValues.password,
+      ],
+    });
+    return results.rows[0];
+  }
 }
 
-export default user;
+const user = {
+  create,
+};
 
+export default user;

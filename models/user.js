@@ -1,10 +1,10 @@
 import database from "infra/database.js";
-import { ValidationError, NotFoundError } from "infra/errors.js"; 
+import { ValidationError, NotFoundError } from "infra/errors.js";
 
-async function findOnByUsername(username){
+async function findOnByUsername(username) {
   const userFound = await runSelectQuery(username);
 
-  return userFound
+  return userFound;
 
   async function runSelectQuery(username) {
     const results = await database.query({
@@ -28,7 +28,7 @@ async function findOnByUsername(username){
       });
     }
 
-    return results.rows[0]
+    return results.rows[0];
   }
 }
 

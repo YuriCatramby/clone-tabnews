@@ -78,8 +78,6 @@ export class NotFoundError extends Error {
   }
 }
 
-
-
 export class MethodNotAllowedError extends Error {
   constructor() {
     super("Method not allowed for this endpoint.");

@@ -9,7 +9,6 @@ beforeAll(async () => {
 
 describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
-
     test("With exact case match", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -25,7 +24,9 @@ describe("GET /api/v1/users/[username]", () => {
 
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users/SameCase");
+      const response2 = await fetch(
+        "http://localhost:3000/api/v1/users/SameCase",
+      );
 
       expect(response2.status).toBe(200);
 
@@ -43,9 +44,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(uuidVersion(response2Body.id)).toBe(4);
       expect(Date.parse(response2Body.created_at)).not.toBeNaN();
       expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
-
     });
-
 
     test("With exact case mismatch", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
@@ -62,7 +61,9 @@ describe("GET /api/v1/users/[username]", () => {
 
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users/differentcase");
+      const response2 = await fetch(
+        "http://localhost:3000/api/v1/users/differentcase",
+      );
 
       expect(response2.status).toBe(200);
 
@@ -80,13 +81,12 @@ describe("GET /api/v1/users/[username]", () => {
       expect(uuidVersion(response2Body.id)).toBe(4);
       expect(Date.parse(response2Body.created_at)).not.toBeNaN();
       expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
-
     });
 
-
     test("With nonexistent username", async () => {
-
-      const response2 = await fetch("http://localhost:3000/api/v1/users/NonExistentUser");
+      const response2 = await fetch(
+        "http://localhost:3000/api/v1/users/NonExistentUser",
+      );
 
       expect(response2.status).toBe(404);
 
@@ -96,7 +96,7 @@ describe("GET /api/v1/users/[username]", () => {
         name: "NotFoundError",
         message: "Username not found in system.",
         action: "Check if the username was typed correctly.",
-        status_code: 404
+        status_code: 404,
       });
     });
   });

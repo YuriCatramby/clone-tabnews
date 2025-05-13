@@ -37,17 +37,21 @@ describe("POST /api/v1/users", () => {
         updated_at: responseBody.updated_at,
       });
 
-      console.log(responseBody)
-
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
-      const userInDatabase = await user.findOnByUsername("yuri")
-      const correctPasswordMatch = await password.compare("senha1", userInDatabase.password)
-      const incorrectPasswordMatch = await password.compare("senha12", userInDatabase.password)
-      expect(correctPasswordMatch).toBe(true)
-      expect(incorrectPasswordMatch).toBe(false)
+      const userInDatabase = await user.findOnByUsername("yuri");
+      const correctPasswordMatch = await password.compare(
+        "senha1",
+        userInDatabase.password,
+      );
+      const incorrectPasswordMatch = await password.compare(
+        "senha12",
+        userInDatabase.password,
+      );
+      expect(correctPasswordMatch).toBe(true);
+      expect(incorrectPasswordMatch).toBe(false);
     });
 
     test("With duplicated email", async () => {
@@ -84,7 +88,7 @@ describe("POST /api/v1/users", () => {
       expect(response2Body).toEqual({
         name: "ValidationError",
         message: "The email provided is already in use.",
-        action: "Use another email to register.",
+        action: "Use another email for this operation.",
         status_code: 400,
       });
     });
@@ -123,7 +127,7 @@ describe("POST /api/v1/users", () => {
       expect(response2Body).toEqual({
         name: "ValidationError",
         message: "The username provided is already in use.",
-        action: "Use another username to register.",
+        action: "Use another username for this operation.",
         status_code: 400,
       });
     });

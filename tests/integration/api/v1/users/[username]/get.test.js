@@ -78,7 +78,7 @@ describe("GET /api/v1/users/[username]", () => {
         updated_at: response2Body.updated_at,
       });
 
-      console.log(response2Body)
+      console.log(response2Body);
 
       expect(uuidVersion(response2Body.id)).toBe(4);
       expect(Date.parse(response2Body.created_at)).not.toBeNaN();

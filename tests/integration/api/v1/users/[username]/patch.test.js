@@ -33,12 +33,12 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With duplicated 'username'", async () => {
       await orchestrator.createUser({
-          username: "user1",
-        })
+        username: "user1",
+      });
 
       await orchestrator.createUser({
-          username: "user2",
-        })
+        username: "user2",
+      });
 
       const response = await fetch("http://localhost:3000/api/v1/users/user2", {
         method: "PATCH",
@@ -64,11 +64,11 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With duplicated 'email'", async () => {
       await orchestrator.createUser({
-          email: "email1@email.com",
-        })
+        email: "email1@email.com",
+      });
       const createdUser2 = await orchestrator.createUser({
-          email: "email2@email.com",
-        })
+        email: "email2@email.com",
+      });
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${createdUser2.username}`,
@@ -96,7 +96,7 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With unique 'username'", async () => {
-      const createdUser = await orchestrator.createUser({})
+      const createdUser = await orchestrator.createUser({});
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${createdUser.username}`,
@@ -132,7 +132,7 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With unique 'email'", async () => {
-      const user1Response = await orchestrator.createUser({})
+      const user1Response = await orchestrator.createUser({});
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${user1Response.username}`,
@@ -169,8 +169,8 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With new 'password'", async () => {
       const createdUser = await orchestrator.createUser({
-          password: "newPassword1",
-      })
+        password: "newPassword1",
+      });
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${createdUser.username}`,

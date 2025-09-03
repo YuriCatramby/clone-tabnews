@@ -1,22 +1,55 @@
 import user from "models/user.js";
 import password from "models/password.js";
-import { UnauthorizedError } from "infra/errors.js";
+import { NotFoundError, UnauthorizedError } from "infra/errors.js";
 
 async function getAuthenticatedUser(providedEmail, providedPassword) {
-  const storedUser = await user.findOneByEmail(providedEmail);
-  const correctPasswordMatch = await password.compare(
-    providedPassword,
-    storedUser.password
-  );
+  try {
+    const storedUser = await findOneByEmail(providedEmail);
+    await validatePassword(providedPassword, storedUser.password);
 
-  if (!correctPasswordMatch) {
-    throw new UnauthorizedError({
-      message: "The password is wrong.",
-      action: "Check if the data is right.",
-    });
+    return storedUser;
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      throw new UnauthorizedError({
+        message: "The authentication data is not correct.",
+        action: "Check if the data is right.",
+      });
+    }
+
+    throw error;
   }
 
-  return storedUser;
+  async function findOneByEmail(providedEmail) {
+    let storedUser;
+
+    try {
+      storedUser = await user.findOneByEmail(providedEmail);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new UnauthorizedError({
+          message: "The email is wrong.",
+          action: "Check if the data is right.",
+        });
+      }
+      throw error;
+    }
+
+    return storedUser;
+  }
+
+  async function validatePassword(providedPassword, storedPpassword) {
+    const correctPasswordMatch = await password.compare(
+      providedPassword,
+      storedPpassword
+    );
+
+    if (!correctPasswordMatch) {
+      throw new UnauthorizedError({
+        message: "The password is wrong.",
+        action: "Check if the data is right.",
+      });
+    }
+  }
 }
 
 const authentication = { getAuthenticatedUser };

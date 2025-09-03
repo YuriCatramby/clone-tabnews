@@ -1,7 +1,5 @@
 import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
-import user from "models/user.js";
-import password from "models/password.js";
 import authentication from "models/authentication.js";
 import { UnauthorizedError } from "infra/errors.js";
 
@@ -19,24 +17,15 @@ async function postHandler(request, response) {
       userInputValues.email,
       userInputValues.password
     );
-
-    const storedUser = await user.findOneByEmail(userInputValues.email);
-    const correctPasswordMatch = await password.compare(
-      userInputValues.password,
-      storedUser.password
-    );
-
-    if (!correctPasswordMatch) {
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
       throw new UnauthorizedError({
-        message: "The password is wrong.",
+        message: "The authentication data is not correct.",
         action: "Check if the data is right.",
       });
     }
-  } catch (error) {
-    throw new UnauthorizedError({
-      message: "The authentication data is not correct.",
-      action: "Check if the data is right.",
-    });
+
+    throw error;
   }
 
   return response.status(201).json({});

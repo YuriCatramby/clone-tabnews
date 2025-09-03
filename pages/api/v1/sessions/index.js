@@ -15,7 +15,7 @@ async function postHandler(request, response) {
   try {
     const authenticatedUser = await authentication.getAuthenticatedUser(
       userInputValues.email,
-      userInputValues.password
+      userInputValues.password,
     );
   } catch (error) {
     if (error instanceof UnauthorizedError) {

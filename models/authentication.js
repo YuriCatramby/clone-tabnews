@@ -40,7 +40,7 @@ async function getAuthenticatedUser(providedEmail, providedPassword) {
   async function validatePassword(providedPassword, storedPassword) {
     const correctPasswordMatch = await password.compare(
       providedPassword,
-      storedPassword
+      storedPassword,
     );
 
     if (!correctPasswordMatch) {

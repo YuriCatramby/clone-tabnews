@@ -2,7 +2,7 @@ import database from "infra/database.js";
 import password from "models/password.js";
 import { ValidationError, NotFoundError } from "infra/errors.js";
 
-async function findOnByUsername(username) {
+async function findOneByUsername(username) {
   const userFound = await runSelectQuery(username);
 
   return userFound;
@@ -26,6 +26,37 @@ async function findOnByUsername(username) {
       throw new NotFoundError({
         message: "Username not found in system.",
         action: "Check if the username was typed correctly.",
+      });
+    }
+
+    return results.rows[0];
+  }
+}
+
+async function findOneByEmail(email) {
+  const userFound = await runSelectQuery(email);
+
+  return userFound;
+
+  async function runSelectQuery(email) {
+    const results = await database.query({
+      text: `
+            SELECT
+              *
+            FROM
+              users
+            WHERE
+              LOWER(email) = LOWER($1)
+            LIMIT 
+              1
+            ;`,
+      values: [email],
+    });
+
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message: "Email not found in system.",
+        action: "Check if the email was typed correctly.",
       });
     }
 
@@ -62,7 +93,7 @@ async function create(userInputValues) {
 }
 
 async function update(username, userInputValues) {
-  const currentUser = await findOnByUsername(username);
+  const currentUser = await findOneByUsername(username);
 
   if ("username" in userInputValues) {
     await validateUniqueUsername(userInputValues.username);
@@ -157,8 +188,9 @@ async function hashPasswordInObject(userInputValues) {
 
 const user = {
   create,
-  findOnByUsername,
+  findOneByUsername,
   update,
+  findOneByEmail,
 };
 
 export default user;
